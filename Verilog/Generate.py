@@ -12,7 +12,7 @@ for i in range(66):
     if(i<40):
         print("     //Feed input to Multipliers")
         for j in range(196):
-            pixel = int(i/10)*196 + j
+            pixel = int(i%4)*196 + j
             outtgt  = int(i/4)
             print("         Multiplyer_matrix[{}].Feature = FeatureBuf_{};".format(j,pixel))
             print("         Multiplyer_matrix[{}].Weight = Wgt_{}_{};".format(j,outtgt,pixel))
