@@ -8660,16 +8660,16 @@ module Image_Classifier (
 //////// Global Reg/Wire Instantiation////
 // Buffers for max selecting
     reg[3:0] W11,W12,W13,W14,W15;
-    reg[25:0] V11,V12,V13,V14,V15;
+    reg signed[25:0] V11,V12,V13,V14,V15;
     reg[3:0] W21,W22;
-    reg[25:0] V21,V22;
+    reg signed[25:0] V21,V22;
     reg[3:0] W31,W32;
-    reg[25:0] V31,V32;
+    reg signed[25:0] V31,V32;
     assign Image_Number = V31>V32? W31:W32;
 
 // Buffer for addition result
-reg [25:0] Res0,Res1,Res2,Res3,Res4,Res5,Res6,Res7,Res8,Res9;
-reg [25:0] Res_0_0,
+reg signed [25:0] Res0,Res1,Res2,Res3,Res4,Res5,Res6,Res7,Res8,Res9;
+reg signed [25:0] Res_0_0,
     Res_0_1,
     Res_0_2,
     Res_0_3,
@@ -34331,20 +34331,48 @@ always@(*)begin
      end
 
     68:begin
-    Res0 = Res0[25]?(1+~Res0):Res0;
-    Res1 = Res1[25]?(1+~Res1):Res1;
-    Res2 = Res2[25]?(1+~Res2):Res2;
-    Res3 = Res3[25]?(1+~Res3):Res3;
-    Res4 = Res4[25]?(1+~Res4):Res4;
-    Res5 = Res5[25]?(1+~Res5):Res5;
-    Res6 = Res6[25]?(1+~Res6):Res6;
-    Res7 = Res7[25]?(1+~Res7):Res7;
-    Res8 = Res8[25]?(1+~Res8):Res8;
-    Res9 = Res9[25]?(1+~Res9):Res9;
-     nxt_state = 69;
+    // Simplified inversion, may lower accuracy but dont require adders.
+    Adder_Base[0].A = Res0;
+    Adder_Base[0].B = {{7{Wgt_0_784[18]}},Wgt_0_784};
+    Adder_Base[1].A = Res1;
+    Adder_Base[1].B = {{7{Wgt_1_784[18]}},Wgt_1_784};
+    Adder_Base[2].A = Res2;
+    Adder_Base[2].B = {{7{Wgt_2_784[18]}},Wgt_2_784};
+    Adder_Base[3].A = Res3;
+    Adder_Base[3].B = {{7{Wgt_3_784[18]}},Wgt_3_784};
+    Adder_Base[4].A = Res4;
+    Adder_Base[4].B = {{7{Wgt_4_784[18]}},Wgt_4_784};
+    Adder_Base[5].A = Res5;
+    Adder_Base[5].B = {{7{Wgt_5_784[18]}},Wgt_5_784};
+    Adder_Base[6].A = Res6;
+    Adder_Base[6].B = {{7{Wgt_6_784[18]}},Wgt_6_784};
+    Adder_Base[7].A = Res7;
+    Adder_Base[7].B = {{7{Wgt_7_784[18]}},Wgt_7_784};
+    Adder_Base[8].A = Res8;
+    Adder_Base[8].B = {{7{Wgt_8_784[18]}},Wgt_8_784};
+    Adder_Base[9].A = Res9;
+    Adder_Base[9].B = {{7{Wgt_9_784[18]}},Wgt_9_784};
+    nxt_state = 69;
     end
 
     69:begin
+        nxt_state = 70;
+    end
+    70:begin
+            Res0 = Adder_Base[0].Res;
+            Res1 = Adder_Base[1].Res;
+            Res2 = Adder_Base[2].Res;
+            Res3 = Adder_Base[3].Res;
+            Res4 = Adder_Base[4].Res;
+            Res5 = Adder_Base[5].Res;
+            Res6 = Adder_Base[6].Res;
+            Res7 = Adder_Base[7].Res;
+            Res8 = Adder_Base[8].Res;
+            Res9 = Adder_Base[9].Res;
+            nxt_state = 71;
+    end
+
+    71:begin
         W11 = Res0>Res1?0:1;
         W12 = Res2>Res3?2:3;
         W13 = Res4>Res5?4:5;
@@ -34355,25 +34383,25 @@ always@(*)begin
         V13 = Res4>Res5?Res4:Res5;
         V14 = Res6>Res7?Res6:Res7;
         V15 = Res8>Res9?Res8:Res9;
-        nxt_state = 70;
+        nxt_state = 72;
     end
-    70:begin
+    72:begin
         W21 = V11>V12?W11:W12;
         W22 = V13>V14?W13:W14;
         V21 = V11>V12?V11:V12;
         V22 = V13>V14?V13:V14;
-        nxt_state = 71;
+        nxt_state = 73;
     end
-    71:begin
+    73:begin
         W31 = V21>V22?W21:W22;
         W32 = V21>V15?W21:W15;
         V31 = V21>V22?V21:V22;
         V32 = V21>V15?V21:V15;
-        nxt_state = 72;
+        nxt_state = 74;
     end
-    72:begin
+    74:begin
         Output_Valid = 1;
-        nxt_state=Input_Valid?1:72;
+        nxt_state=Input_Valid?1:74;
     end
     endcase
 end
