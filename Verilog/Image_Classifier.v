@@ -34331,34 +34331,36 @@ always@(*)begin
      end
 
     68:begin
-    // Simplified inversion, may lower accuracy but dont require adders.
-    Adder_Base[0].A = Res0;
-    Adder_Base[0].B = {{7{Wgt_0_784[18]}},Wgt_0_784};
-    Adder_Base[1].A = Res1;
-    Adder_Base[1].B = {{7{Wgt_1_784[18]}},Wgt_1_784};
-    Adder_Base[2].A = Res2;
-    Adder_Base[2].B = {{7{Wgt_2_784[18]}},Wgt_2_784};
-    Adder_Base[3].A = Res3;
-    Adder_Base[3].B = {{7{Wgt_3_784[18]}},Wgt_3_784};
-    Adder_Base[4].A = Res4;
-    Adder_Base[4].B = {{7{Wgt_4_784[18]}},Wgt_4_784};
-    Adder_Base[5].A = Res5;
-    Adder_Base[5].B = {{7{Wgt_5_784[18]}},Wgt_5_784};
-    Adder_Base[6].A = Res6;
-    Adder_Base[6].B = {{7{Wgt_6_784[18]}},Wgt_6_784};
-    Adder_Base[7].A = Res7;
-    Adder_Base[7].B = {{7{Wgt_7_784[18]}},Wgt_7_784};
-    Adder_Base[8].A = Res8;
-    Adder_Base[8].B = {{7{Wgt_8_784[18]}},Wgt_8_784};
-    Adder_Base[9].A = Res9;
-    Adder_Base[9].B = {{7{Wgt_9_784[18]}},Wgt_9_784};
-    nxt_state = 69;
+        // Add bias to the result
+        Adder_Base[0].A = Res0;
+        Adder_Base[0].B = {{7{Wgt_0_784[18]}},Wgt_0_784};
+        Adder_Base[1].A = Res1;
+        Adder_Base[1].B = {{7{Wgt_1_784[18]}},Wgt_1_784};
+        Adder_Base[2].A = Res2;
+        Adder_Base[2].B = {{7{Wgt_2_784[18]}},Wgt_2_784};
+        Adder_Base[3].A = Res3;
+        Adder_Base[3].B = {{7{Wgt_3_784[18]}},Wgt_3_784};
+        Adder_Base[4].A = Res4;
+        Adder_Base[4].B = {{7{Wgt_4_784[18]}},Wgt_4_784};
+        Adder_Base[5].A = Res5;
+        Adder_Base[5].B = {{7{Wgt_5_784[18]}},Wgt_5_784};
+        Adder_Base[6].A = Res6;
+        Adder_Base[6].B = {{7{Wgt_6_784[18]}},Wgt_6_784};
+        Adder_Base[7].A = Res7;
+        Adder_Base[7].B = {{7{Wgt_7_784[18]}},Wgt_7_784};
+        Adder_Base[8].A = Res8;
+        Adder_Base[8].B = {{7{Wgt_8_784[18]}},Wgt_8_784};
+        Adder_Base[9].A = Res9;
+        Adder_Base[9].B = {{7{Wgt_9_784[18]}},Wgt_9_784};
+        nxt_state = 69;
     end
 
     69:begin
+        // Wait for the bias calculation finish
         nxt_state = 70;
     end
     70:begin
+        // Read final number
             Res0 = Adder_Base[0].Res;
             Res1 = Adder_Base[1].Res;
             Res2 = Adder_Base[2].Res;
@@ -34373,6 +34375,7 @@ always@(*)begin
     end
 
     71:begin
+        // Start comparasion
         W11 = Res0>Res1?0:1;
         W12 = Res2>Res3?2:3;
         W13 = Res4>Res5?4:5;
