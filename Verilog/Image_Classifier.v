@@ -8651,7 +8651,6 @@ module Image_Classifier (
  always@(posedge clk, negedge GlobalReset) begin
      if(!GlobalReset) begin
         state <= 0;
-        nxt_state <= 0;
      end
      else
         state <= nxt_state;
@@ -34422,7 +34421,7 @@ always@(*)begin
     end
     74:begin
         Output_Valid = 1;
-        nxt_state=Input_Valid?1:74;
+        nxt_state =Input_Valid?1:74;
     end
     endcase
 end
