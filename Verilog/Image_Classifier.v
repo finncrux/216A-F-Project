@@ -9502,33 +9502,42 @@ reg[9:0] FeatureBuf_0;
 //////// Multiplier Instantiation///////
 genvar i;
 // Instantiate 0-195 Mutiplyer
+generate
 for (i=0; i<784/4; i = i+1) begin: Multiplyer_matrix
     reg [9:0]  Feature;
     reg [18:0] Weight;
     wire[25:0] Result;
     FixedPointMultiplier Inst(.clk(clk),.GlobalReset(~GlobalReset),.WeightPort(Weight),.PixelPort(Feature),.Output_syn(Result));
 end
-
+endgenerate
 // Instantiate 7 level Adder Tree, total dealy = 16; Partially TESTED
     wire[25:0] Part_Res;
     wire[25:0] Final_Res;
     // Base
     genvar j;
+    generate
     for(j = 0; j<98; j=j+1) begin:Adder_Base
         reg[25:0] A,B;
         wire[25:0] Res;
         FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(A),.Port2(B),.Output_syn(Res));
         end
 
+    endgenerate
+
+    
     // L1
+    
     genvar k;
+    generate
     for(k = 0; k<49; k=k+1) begin:Adder_L1
         wire[25:0] Res;
         FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_Base[k*2].Res),.Port2(Adder_Base[k*2+1].Res),.Output_syn(Res));
     end
-    
+    endgenerate
+
     // L2
     genvar l;
+    generate
     for(l=0; l<25; l=l+1) begin:Adder_L2
         wire[25:0] Res;
         if(l<24)
@@ -9536,9 +9545,11 @@ end
         else
             FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_L1[l*2].Res),.Port2(26'b0),.Output_syn(Res));
     end
+    endgenerate
 
     // L3
     genvar m;
+    generate
     for(m=0; m<13; m=m+1) begin:Adder_L3
         wire[25:0] Res;
         if(m<12)
@@ -9546,9 +9557,11 @@ end
         else
             FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_L2[m*2].Res),.Port2(26'b0),.Output_syn(Res));
     end
+    endgenerate
 
     // L4
     genvar n;
+    generate
     for(n=0; n<7; n=n+1) begin:Adder_L4
         wire[25:0] Res;
         if(n < 6)
@@ -9556,9 +9569,11 @@ end
         else 
             FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_L3[n*2].Res),.Port2(26'b0),.Output_syn(Res));
     end
+    endgenerate
 
     // L5
     genvar o;
+    generate
     for(o=0; o<4; o=o+1) begin:Adder_L5
         wire[25:0] Res;
         if(o < 3)
@@ -9566,13 +9581,16 @@ end
         else
             FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_L4[o*2].Res),.Port2(26'b0),.Output_syn(Res));
     end
+    endgenerate
 
     // L6
     genvar p;
+    generate
     for(p=0; p<2;p=p+1) begin:Adder_L6
         wire[25:0] Res;
             FixedPointAdder Adder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_L5[p*2].Res),.Port2(Adder_L5[p*2+1].Res),.Output_syn(Res));
     end
+    endgenerate
 
     // L7
     FixedPointAdder FinalAdder( .clk(clk),.GlobalReset(~GlobalReset),.Port1(Adder_L6[0].Res),.Port2(Adder_L6[1].Res),.Output_syn(Part_Res));
