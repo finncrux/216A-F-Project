@@ -8642,7 +8642,7 @@ module Image_Classifier (
  );
 
 //////// State Machine Formation////////
- reg[9:0] state, nxt_state;
+ reg[6:0] state, nxt_state;
  //0: IDLE
  //1: Buffer Input
  //2-41: Calculation
