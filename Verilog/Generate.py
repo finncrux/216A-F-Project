@@ -25,7 +25,7 @@ for i in range(106):
         print("     //Collect Partial result form Adder")
         portion = Add_i%8
         target = int(Add_i/8)
-        print("         Res_{}_{} = Part_Res;".format(target,portion))
+        print("         Res_{}_{}_n = Part_Res;".format(target,portion))
 
     if (Add_i>=0)&(Add_i<80):
         portion = Add_i%8
@@ -33,20 +33,20 @@ for i in range(106):
         if(portion == 7):
             print("     //Feed to final Adder")
             print("         A1 = Part_Res;".format(target,portion))
-            print("         A2 = Res_{}_{};".format(target,portion-1))
-            print("         A3 = Res_{}_{};".format(target,portion-2))
-            print("         A4 = Res_{}_{};".format(target,portion-3))
-            print("         A5 = Res_{}_{};".format(target,portion-4))
-            print("         A6 = Res_{}_{};".format(target,portion-5))
-            print("         A7 = Res_{}_{};".format(target,portion-6))
-            print("         A8 = Res_{}_{};".format(target,portion-7))
+            print("         A2 = Res_{}_{}_n;".format(target,portion-1))
+            print("         A3 = Res_{}_{}_n;".format(target,portion-2))
+            print("         A4 = Res_{}_{}_n;".format(target,portion-3))
+            print("         A5 = Res_{}_{}_n;".format(target,portion-4))
+            print("         A6 = Res_{}_{}_n;".format(target,portion-5))
+            print("         A7 = Res_{}_{}_n;".format(target,portion-6))
+            print("         A8 = Res_{}_{}_n;".format(target,portion-7))
 
     if (Final_i>=0)&(Final_i<80):
         portion = Final_i%8
         target = int(Final_i/8)
         if(portion ==7):
             print("     //Collect result from final Adder")
-            print("         Res{} = Final_Res;".format(target))
+            print("         Res{}_n = Final_Res;".format(target))
 
     print("     end")
 
