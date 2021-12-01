@@ -2,11 +2,11 @@
     #print("FeatureBuf_{}<= Pix_{};".format(i,i))
     #print("reg[9:0] Adder_In_{};".format(i))
 
-for i in range(106):
+for i in range(108):
     state = i + 2
-    Mul_i = i-6
-    Add_i = i-6-14
-    Final_i= i-6-14-6
+    Mul_i = i-6-1
+    Add_i = i-6-14-1-1
+    Final_i= i-6-14-6-1-1
     print("    {}:begin".format(state))
     print("     nxt_state = {};".format((state +1)))
     if(i<80):
@@ -14,13 +14,13 @@ for i in range(106):
         for j in range(98):
             pixel = int(i%8)*98 + j
             outtgt  = int(i/8)
-            print("         Multiplyer_matrix[{}].Feature = FeatureBuf_{};".format(j,pixel))
-            print("         Multiplyer_matrix[{}].Weight = Wgt_{}_{};".format(j,outtgt,pixel))
+            print("         Mult_Buf[{}].Feature_n = FeatureBuf_{};".format(j,pixel))
+            print("         Mult_Buf[{}].Weight_n = Wgt_{}_{};".format(j,outtgt,pixel))
     if (Mul_i>=0) & (Mul_i<80):
         print("     //Feed input to Adders")
         for j in range(49):
-            print("         Adder_Base[{}].A = Multiplyer_matrix[{}].Result;".format(j,j*2))
-            print("         Adder_Base[{}].B = Multiplyer_matrix[{}].Result;".format(j,j*2+1))
+            print("         Add_Buf[{}].A_n = Multiplyer_matrix[{}].Result;".format(j,j*2))
+            print("         Add_Buf[{}].B_n = Multiplyer_matrix[{}].Result;".format(j,j*2+1))
     if (Add_i>=0)&(Add_i<80):
         print("     //Collect Partial result form Adder")
         portion = Add_i%8
