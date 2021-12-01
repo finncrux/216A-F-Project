@@ -11485,7 +11485,7 @@ genvar i;
 generate
 for (i=0; i<784/8; i = i+1) begin: Multiplyer_matrix
     wire[25:0] Result;
-    FixedPointMultiplier Inst(.clk(clk),.GlobalReset(~GlobalReset),.WeightPort(Mult_Buf[i].Weight),.PixelPort(Mult_Buf[i].Feature[9:1]),.Output_syn(Result));
+    FixedPointMultiplier Inst(.clk(clk),.GlobalReset(~GlobalReset),.WeightPort(Mult_Buf[i].Weight),.PixelPort(Mult_Buf[i].Feature),.Output_syn(Result));
 end
 endgenerate
 // Instantiate 6 level Adder Tree, total dealy = 14; Partially TESTED
